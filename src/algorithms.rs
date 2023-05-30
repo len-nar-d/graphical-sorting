@@ -91,3 +91,53 @@ impl BubbleSort {
     }
 }
 
+
+pub struct QuickSort {
+    sorting: Sorting,
+}
+
+impl QuickSort {
+    pub fn new(transmitter: Sender<[u16; 3]>) -> Self {
+        let mut sorting = Sorting::new(transmitter);
+        sorting.randomize();
+        return Self { sorting: sorting };
+    }
+
+    pub fn sort(&mut self) {
+        let len = self.sorting.list.len();
+        self.quick_sort(0, (len-1) as isize);
+        self.sorting.verify();
+    }
+
+    fn quick_sort(&mut self, low: isize, high: isize) {
+        if low < high {
+            let p = self.partition(low, high);
+            self.quick_sort(low, p-1);
+            self.quick_sort(p+1, high);
+        }
+    }
+
+    fn partition(&mut self, low: isize, high: isize) -> isize {
+        let pivot = high as usize;
+        let mut store_index = low-1;
+        let mut last_index = high;
+
+        loop {
+            store_index += 1;
+            while self.sorting.list[store_index as usize] < self.sorting.list[pivot] {
+                store_index += 1;
+            }
+            last_index -= 1;
+            while last_index >= 0 && self.sorting.list[last_index as usize] > self.sorting.list[pivot] {
+                last_index -= 1;
+            }
+            if store_index >= last_index {
+                break;
+            } else {
+                self.sorting.swap_items(store_index as usize, last_index as usize);
+            }
+        }
+        self.sorting.swap_items(store_index as usize, pivot as usize);
+        return store_index;
+    }
+}
