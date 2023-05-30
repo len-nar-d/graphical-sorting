@@ -1,5 +1,5 @@
 # graphical-sorting
 
-Sorts random array through bubble sort. Process is displayed in the console with ascii-characters.
+Sorts random arrays. Process is displayed in the console with ascii-characters.
 
 ![QuickSort](QuickSort.gif)
